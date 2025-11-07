@@ -184,10 +184,13 @@ const Main = () => {
       />
       <div className="dark-mode-toggle" onClick={toggleDarkMode}>
         {isDarkMode ? (
-          <img src="/assets/images/duo/icon.svg" alt="Light Mode" className="dark-mode-icon" />
+          <img src="/images/duo/icon.svg" alt="Light Mode" className="dark-mode-icon" />
         ) : (
-          <img src="/assets/images/duo/icon-dark.svg" alt="Dark Mode" className="dark-mode-icon" />
+          <img src="/images/duo/icon-dark.svg" alt="Dark Mode" className="dark-mode-icon" />
         )}
+      </div>
+      <div className="follow-banner">
+        <img src="/images/duo/follow_for_more.png" alt="Follow for more" className="follow-image" />
       </div>
       <div className="main-content">
         <div className="hover-container left-panel">
