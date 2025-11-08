@@ -10,6 +10,7 @@ import OSM from 'ol/source/OSM';
 import { fromLonLat } from 'ol/proj';
 import { Style, Fill, Stroke } from 'ol/style';
 import './Main.css';
+import { countryData, getFlagUrl, getRandomCountries, getRandomCountry } from '../data/countryData';
 
 const Main = () => {
   const mapRef = useRef(null);
@@ -24,6 +25,9 @@ const Main = () => {
   const [isAnswerChecked, setIsAnswerChecked] = useState(false);
   const [checkState, setCheckState] = useState('unchecked'); // 'unchecked', 'checked', 'correct', 'incorrect'
   const [showWelcomeModal, setShowWelcomeModal] = useState(true);
+  const [currentQuestion, setCurrentQuestion] = useState(null); // Mevcut soru için ülke
+  const [flagOptions, setFlagOptions] = useState([]); // 4 bayrak seçeneği
+  const [correctAnswerIndex, setCorrectAnswerIndex] = useState(null); // Doğru cevabın index'i
   const vectorSourceRef = useRef(null);
   const vectorLayerRef = useRef(null);
   let highlightFeature = null;
@@ -35,6 +39,27 @@ const Main = () => {
   const startLevel = (section) => {
     setCurrentLevel(section);
     setGameStarted(true);
+    
+    // Bu section için rastgele bir ülke seç (doğru cevap)
+    const correctCountry = getRandomCountry(section);
+    setCurrentQuestion(correctCountry);
+    
+    // Doğru cevap dışında 3 tane daha rastgele ülke seç
+    const otherCountries = getRandomCountries(section, 3, correctCountry);
+    
+    // 4 seçeneği karıştır
+    const allOptions = [correctCountry, ...otherCountries];
+    const shuffledOptions = allOptions.sort(() => Math.random() - 0.5);
+    
+    // Doğru cevabın yeni index'ini bul
+    const correctIndex = shuffledOptions.findIndex(country => country.code === correctCountry.code);
+    
+    setFlagOptions(shuffledOptions);
+    setCorrectAnswerIndex(correctIndex);
+    setSelectedAnswer(null);
+    setIsAnswerChecked(false);
+    setCheckState('unchecked');
+    
     // Zoom animasyonunu section'a göre yap
     const zoomConfigs = {
       header2: { center: fromLonLat([15, 50]), zoom: 4 }, // Avrupa
@@ -58,7 +83,20 @@ const Main = () => {
   const handleCheckClick = () => {
     if (selectedAnswer !== null) {
       setIsAnswerChecked(true);
-      // Doğru/yanlış kontrolü burada yapılacak
+      // Doğru/yanlış kontrolü
+      if (selectedAnswer === correctAnswerIndex) {
+        setCheckState('correct');
+        // Doğru ses çal
+        const correctAudio = new Audio('/sfx/true.mp3');
+        correctAudio.volume = 0.5;
+        correctAudio.play().catch(error => console.log('Audio play failed:', error));
+      } else {
+        setCheckState('incorrect');
+        // Yanlış ses çal
+        const wrongAudio = new Audio('/sfx/false.mp3');
+        wrongAudio.volume = 0.5;
+        wrongAudio.play().catch(error => console.log('Audio play failed:', error));
+      }
     }
   };
 
@@ -359,18 +397,22 @@ const Main = () => {
                         
                         {/* 4 Bayrak Seçeneği */}
                         <div className="flag-options-game">
-                          <div className={`flag-option ${selectedAnswer === 0 ? 'selected' : ''}`} onClick={() => handleAnswerSelect(0)}>
-                            <img src="/images/duo/level_path/Story.png" alt="Option 1" />
-                          </div>
-                          <div className={`flag-option ${selectedAnswer === 1 ? 'selected' : ''}`} onClick={() => handleAnswerSelect(1)}>
-                            <img src="/images/duo/level_path/Story.png" alt="Option 2" />
-                          </div>
-                          <div className={`flag-option ${selectedAnswer === 2 ? 'selected' : ''}`} onClick={() => handleAnswerSelect(2)}>
-                            <img src="/images/duo/level_path/Story.png" alt="Option 3" />
-                          </div>
-                          <div className={`flag-option ${selectedAnswer === 3 ? 'selected' : ''}`} onClick={() => handleAnswerSelect(3)}>
-                            <img src="/images/duo/level_path/Story.png" alt="Option 4" />
-                          </div>
+                          {flagOptions.map((country, index) => (
+                            <div 
+                              key={index}
+                              className={`flag-option ${selectedAnswer === index ? 'selected' : ''}`} 
+                              onClick={() => handleAnswerSelect(index)}
+                            >
+                              <img 
+                                src={getFlagUrl(country.code, country.name)} 
+                                alt={country.name}
+                                onError={(e) => {
+                                  console.log(`Flag not found for ${country.name} (${country.code})`);
+                                  e.target.src = '/images/duo/level_path/Story.png'; // Fallback image
+                                }}
+                              />
+                            </div>
+                          ))}
                         </div>
 
                         {/* Check Button */}
