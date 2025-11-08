@@ -15,7 +15,14 @@ const Main = () => {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [openSection, setOpenSection] = useState(null);
+  const [currentLevel, setCurrentLevel] = useState(null); // 'header2', 'header1', 'header'
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [isAnswerChecked, setIsAnswerChecked] = useState(false);
+  const [checkState, setCheckState] = useState('unchecked'); // 'unchecked', 'checked', 'correct', 'incorrect'
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedCountries, setSelectedCountries] = useState(new Set());
   const [lastSelectedFeature, setLastSelectedFeature] = useState(null);
@@ -23,8 +30,65 @@ const Main = () => {
   const vectorLayerRef = useRef(null);
   let highlightFeature = null;
 
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  const startLevel = (section) => {
+    setCurrentLevel(section);
+    setGameStarted(true);
+    // Zoom animasyonunu section'a göre yap
+    const zoomConfigs = {
+      header2: { center: fromLonLat([15, 50]), zoom: 4 }, // Avrupa
+      header1: { center: fromLonLat([-90, 0]), zoom: 3 }, // Amerika
+      header: { center: fromLonLat([100, 35]), zoom: 3 } // Asya
+    };
+    
+    if (mapInstanceRef.current && zoomConfigs[section]) {
+      mapInstanceRef.current.getView().animate({
+        ...zoomConfigs[section],
+        duration: 1000
+      });
+    }
+  };
+
+  const handleAnswerSelect = (flagIndex) => {
+    setSelectedAnswer(flagIndex);
+    setCheckState('checked');
+  };
+
+  const handleCheckClick = () => {
+    if (selectedAnswer !== null) {
+      setIsAnswerChecked(true);
+      // Doğru/yanlış kontrolü burada yapılacak
+    }
+  };
+
+  const startGame = () => {
+    setGameStarted(true);
+    // Haritayı Avrupa'ya zoomla
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.getView().animate({
+        center: fromLonLat([15, 50]), // Avrupa merkezi
+        zoom: 4,
+        duration: 1000
+      });
+    }
+  };
+
   const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
+    if (isDarkMode) {
+      // Açık moda geçerken kapanış animasyonunu başlat
+      setIsClosing(true);
+      // Animasyonun bitmesini bekle (0.8s)
+      setTimeout(() => {
+        setIsDarkMode(false);
+        setIsClosing(false);
+      }, 800);
+    } else {
+      // Karanlık moda geçerken direkt değiştir (açılış animasyonu CSS'den gelir)
+      setIsDarkMode(true);
+    }
   };
 
   const handleHomeClick = () => {
@@ -189,8 +253,15 @@ const Main = () => {
           <img src="/images/duo/icon-dark.svg" alt="Dark Mode" className="dark-mode-icon" />
         )}
       </div>
-      <div className="follow-banner">
-        <img src="/images/duo/follow_for_more.png" alt="Follow for more" className="follow-image" />
+      <div className={`follow-banner ${isDarkMode ? 'slide-in' : ''} ${isClosing && isDarkMode ? 'slide-out' : ''}`}>
+        <div className="follow-banner-content">
+          <img src="/images/duo/follow_for_more.png" alt="Follow for more" className="follow-image" />
+
+          <a href="https://github.com/kaanklcrsln" target="_blank" rel="noopener noreferrer" className="follow-button-link">
+            <img src="/images/duo/follow_button.png" alt="Follow button" className="follow-button" />
+          </a>
+
+        </div>
       </div>
       <div className="main-content">
         <div className="hover-container left-panel">
@@ -245,9 +316,129 @@ const Main = () => {
                   </div>
                 </div>
               ) : (
-                <div className="placeholder-text">
-                  <p>Haritada bir ülkeye tıklayarak başla!</p>
-                </div>
+                <>
+                  {!gameStarted ? (
+                    <div className="level-path-container">
+                      {/* Header 2 - Top Level */}
+                      <div className={`level-section ${openSection === 'header2' ? 'open' : ''}`}>
+                        <div className="header-wrapper" onClick={() => toggleSection('header2')}>
+                          <img src="/images/players/blonde-kid.svg" alt="Blonde Kid" className="character-image" />
+                          <img src="/images/duo/level_path/Header (2).png" alt="Header 2" className="header-image" />
+                        </div>
+                        {openSection === 'header2' && (
+                          <div className="level-content">
+                          <button className="level-button div-button" title="Div Challenge" onClick={() => startLevel('header2')}>
+                            <img src="/images/duo/level_path/div.png" alt="Div" />
+                          </button>
+                          <button className="level-button story-button" title="Story 1">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 1" />
+                          </button>
+                          <button className="level-button story-button" title="Story 2">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 2" />
+                          </button>
+                          <button className="level-button story-button" title="Story 3">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 3" />
+    
+
+                          </button>
+                        </div>
+                        )}
+                      </div>
+
+                      {/* Header 1 - Bottom Level */}
+                      <div className={`level-section ${openSection === 'header1' ? 'open' : ''}`}>
+                        <div className="header-wrapper" onClick={() => toggleSection('header1')}>
+                          <img src="/images/players/afro-woman.svg" alt="Afro Woman" className="character-image" />
+                          <img src="/images/duo/level_path/Header (1).png" alt="Header 1" className="header-image" />
+                        </div>
+                        {openSection === 'header1' && (
+                          <div className="level-content">
+                          <button className="level-button div-button" title="Div Challenge" onClick={() => startLevel('header1')}>
+                            <img src="/images/duo/level_path/div.png" alt="Div" />
+                          </button>
+                          <button className="level-button story-button" title="Story 1">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 1" />
+                          </button>
+                          <button className="level-button story-button" title="Story 2">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 2" />
+                          </button>
+                          <button className="level-button story-button" title="Story 3">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 3" />
+                          </button>
+
+
+                        </div>
+                        )}
+                      </div>
+
+                      {/* Header - Final Level */}
+                      <div className={`level-section ${openSection === 'header' ? 'open' : ''}`}>
+                        <div className="header-wrapper" onClick={() => toggleSection('header')}>
+                          <img src="/images/players/purple-girl.svg" alt="Purple Girl" className="character-image" />
+                          <img src="/images/duo/level_path/Header.png" alt="Header" className="header-image" />
+                        </div>
+                        {openSection === 'header' && (
+                          <div className="level-content">
+                          <button className="level-button div-button" title="Div Challenge" onClick={() => startLevel('header')}>
+                            <img src="/images/duo/level_path/div.png" alt="Div" />
+                          </button>
+                          <button className="level-button story-button" title="Story 1">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 1" />
+                          </button>
+                          <button className="level-button story-button" title="Story 2">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 2" />
+                          </button>
+                          <button className="level-button story-button" title="Story 3">
+                            <img src="/images/duo/level_path/Story.png" alt="Story 3" />
+                          </button>
+                        </div>
+                        )}
+                      </div>
+
+                    </div>
+                  ) : (
+                    <div className="game-ui">
+                      {/* Soru Kısımı */}
+                      <div className="question-section">
+                        <img src="/images/duo/Image & Audio.png" alt="Question" className="question-image" />
+                        
+                        {/* 4 Bayrak Seçeneği */}
+                        <div className="flag-options-game">
+                          <div className={`flag-option ${selectedAnswer === 0 ? 'selected' : ''}`} onClick={() => handleAnswerSelect(0)}>
+                            <img src="/images/duo/level_path/Story.png" alt="Option 1" />
+                          </div>
+                          <div className={`flag-option ${selectedAnswer === 1 ? 'selected' : ''}`} onClick={() => handleAnswerSelect(1)}>
+                            <img src="/images/duo/level_path/Story.png" alt="Option 2" />
+                          </div>
+                          <div className={`flag-option ${selectedAnswer === 2 ? 'selected' : ''}`} onClick={() => handleAnswerSelect(2)}>
+                            <img src="/images/duo/level_path/Story.png" alt="Option 3" />
+                          </div>
+                          <div className={`flag-option ${selectedAnswer === 3 ? 'selected' : ''}`} onClick={() => handleAnswerSelect(3)}>
+                            <img src="/images/duo/level_path/Story.png" alt="Option 4" />
+                          </div>
+                        </div>
+
+                        {/* Check Button */}
+                        <button className="check-button" onClick={handleCheckClick} disabled={selectedAnswer === null}>
+                          <img 
+                            src={selectedAnswer !== null ? '/images/duo/check-2.png' : '/images/duo/check-1.png'} 
+                            alt="Check" 
+                          />
+                        </button>
+
+                        {/* Sonuç Gösterimi */}
+                        {isAnswerChecked && (
+                          <div className={`result-message ${checkState === 'correct' ? 'correct' : 'incorrect'}`}>
+                            <img 
+                              src={checkState === 'correct' ? '/images/duo/true.png' : '/images/duo/false.png'} 
+                              alt="Result" 
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}

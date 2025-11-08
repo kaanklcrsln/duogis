@@ -8,6 +8,35 @@
   transition: background 0.3s ease;
 }
 
+@font-face {
+  font-family: 'DIN-Next-Rounded';
+  src: url('/font/DIN-Next-Rounded.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@keyframes slideInFromRight {
+  from {
+    right: -250px;
+    opacity: 0;
+  }
+  to {
+    right: 95px;
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutToRight {
+  from {
+    right: 80px;
+    opacity: 1;
+  }
+  to {
+    right: -250px;
+    opacity: 0;
+  }
+}
+
 .main-page.dark-mode {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
 }
@@ -271,31 +300,103 @@
   width: 28px;
   height: 28px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
 }
 
 /* Follow Banner */
 .follow-banner {
   position: fixed;
-  top: 80px;
-  right: 20px;
+  top: 75px;
+  right: 120px;
   z-index: 100;
   max-width: 200px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  display: none;
 }
 
-.follow-banner:hover {
-  transform: scale(1.05);
+.main-page.dark-mode .follow-banner {
+  display: block;
+}
+
+.follow-banner.slide-in {
+  animation: slideInFromRight 0.8s ease-out forwards;
+}
+
+.follow-banner.slide-out {
+  animation: slideOutToRight 0.8s ease-in forwards;
+}
+
+.main-page:not(.dark-mode) .follow-banner.slide-out {
+  display: none;
+  animation: none;
+}
+
+.main-page:not(.dark-mode) .follow-banner {
+  display: none !important;
+}
+
+.follow-banner-content {
+  position: relative;
+  display: inline-block;
+  width: 100%;
 }
 
 .follow-image {
-  width: 100%;
+  width: 140%;
+  right: 30px;
   height: auto;
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  display: block;
 }
+
+.follow-banner:hover .follow-image {
+  transform: scale(1.05);
+}
+
+.follow-button-link {
+  position: absolute;
+  top: -54px;
+  left: 73px;
+  width: 102%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  text-decoration: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.follow-button {
+    
+  width: 275px;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  padding: 8px;
+}
+
+.follow-button:hover {
+  transform: scale(1.15);
+}
+
+.follow-button:hover ~ .follow-button-text {
+  transform: scale(1.15);
+}
+
+
+
+.follow-button-text:hover {
+  transform: scale(1.0);
+}
+
+.follow-button-link:hover .follow-button {
+  transform: scale(1.05);
+}
+
+
 
 /* Scrollbar Styling */
 .hover-container::-webkit-scrollbar {
@@ -313,6 +414,262 @@
 
 .hover-container::-webkit-scrollbar-thumb:hover {
   background: #5cd65c;
+}
+
+/* Levels Path Image */
+.levels-path-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.levels-path-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.level-start-button {
+  position: absolute;
+  bottom: 91%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.3s ease;
+  z-index: 20;
+}
+
+.level-start-button img {
+  width: 40px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.level-start-button:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.level-start-button:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+/* Level Path Structure */
+.level-path-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.level-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.header-wrapper {
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease;
+  overflow: visible;
+  margin-left: 20px;
+}
+
+.header-wrapper:hover {
+  transform: scale(1.02);
+}
+
+.header-wrapper:active {
+  transform: scale(0.98);
+}
+
+.character-image {
+  position: absolute;
+  top: -56px;
+  right: -40px;
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  z-index: 10;
+}
+
+.header-image {
+  width: 95%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.level-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  animation: slideDownFadeIn 0.5s ease-out forwards;
+}
+
+@keyframes slideDownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.frame-image {
+  width: 70%;
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.level-button {
+  width: 70px;
+  height: 65px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+  z-index: 15;
+  position: relative;
+  opacity: 0;
+  animation: buttonSlideIn 0.4s ease-out forwards;
+}
+
+@keyframes buttonSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Staggered animation delays */
+.level-button:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.level-button:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.level-button:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.level-button:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.level-button:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+.level-button:nth-child(6) {
+  animation-delay: 0.5s;
+}
+
+.level-button:nth-child(7) {
+  animation-delay: 0.6s;
+}
+
+.level-button:nth-child(8) {
+  animation-delay: 0.7s;
+}
+
+.level-button:nth-child(9) {
+  animation-delay: 0.8s;
+}
+
+.div-button {
+  width: 120px;
+  height: 115px;
+  margin-bottom: 10px;
+}
+
+/* Zigzag pattern for story buttons */
+.story-button:nth-of-type(2) {
+  margin-right: 60px;
+}
+
+.story-button:nth-of-type(3) {
+  margin-left: 60px;
+}
+
+.story-button:nth-of-type(4) {
+  margin-right: 60px;
+}
+
+.story-button:nth-of-type(5) {
+  margin-left: 60px;
+}
+
+.story-button:nth-of-type(6) {
+  margin-right: 60px;
+}
+
+.story-button:nth-of-type(7) {
+  margin-left: 60px;
+}
+
+.story-button:nth-of-type(8) {
+  margin-right: 60px;
+}
+
+.story-button:nth-of-type(9) {
+  margin-left: 60px;
+}
+
+.level-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.level-button:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 4px 8px rgba(137, 226, 25, 0.4));
+}
+
+.level-button:active {
+  transform: scale(0.95);
+}
+
+.level-start-button:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.level-start-button:active {
+  transform: translateX(-50%) scale(0.95);
+}
+
+/* Hide scrollbar but keep scrolling */
+.left-panel {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.left-panel::-webkit-scrollbar {
+  display: none;
 }
 
 /* Responsive Design */
@@ -345,3 +702,115 @@
     height: 24px;
   }
 }
+
+/* Game UI Styles */
+.game-ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  gap: 20px;
+}
+
+.question-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.question-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.flag-options-game {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  width: 100%;
+}
+
+.flag-option {
+  aspect-ratio: 1;
+  cursor: pointer;
+  border: 3px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.flag-option:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(137, 226, 25, 0.3);
+}
+
+.flag-option.selected {
+  border-color: #89e219;
+  box-shadow: 0 0 12px rgba(137, 226, 25, 0.6);
+}
+
+.flag-option img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.check-button {
+  width: 80px;
+  height: 80px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.check-button:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.check-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.check-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.result-message {
+  width: 120px;
+  height: 120px;
+  animation: popIn 0.4s ease-out;
+}
+
+.result-message img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
