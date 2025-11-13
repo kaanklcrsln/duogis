@@ -11,6 +11,11 @@ https://github.com/user-attachments/assets/e6b79fb0-829b-4462-b309-9f9bfa13b731
 
 ---
 ![DuoGIS Interface](https://github.com/user-attachments/assets/3bca5ec1-caab-4411-95bd-bbd9c14b7738)
+
+<img width="569" height="1035" alt="1" src="https://github.com/user-attachments/assets/a4cf14e6-38e5-48c1-831b-e0182b7b7885" /> <img width="569" height="1035" alt="1" src="https://github.com/user-attachments/assets/de708cbf-fe71-4e16-a5ee-c145f4aa24ed" />
+
+
+
 ### Mission
 
 To make world geography and cultures fun, interactive, and accessible for everyone — delivering a lasting learning experience inspired by the Duolingo methodology.
