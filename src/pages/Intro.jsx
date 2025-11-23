@@ -23,17 +23,6 @@ const Intro = () => {
     // Start transition sequence
     setIsTransitioning(true);
     
-    // Play intro sound
-    const playIntroSound = () => {
-      const audio = new Audio('/sfx/intro.mp3');
-      audio.volume = 0.5;
-      audio.play().catch(error => {
-        console.log('Audio play failed:', error);
-      });
-    };
-
-    playIntroSound();
-    
     // Fade out content first
     setTimeout(() => {
       setContentFadedOut(true);
@@ -55,6 +44,13 @@ const Intro = () => {
 
   const handleStartGame = () => {
     if (selectedCharacter && username.trim()) {
+      // Play intro sound when navigating to main
+      const audio = new Audio('/sfx/intro.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(error => {
+        console.log('Audio play failed:', error);
+      });
+      
       // Pass character and username data
       navigate('/main', { 
         state: { 
@@ -63,11 +59,6 @@ const Intro = () => {
         } 
       });
     }
-  };
-
-  const handleTryAgain = () => {
-    setSelectedCharacter(null);
-    setUsername('');
   };
 
   return (
@@ -143,9 +134,6 @@ const Intro = () => {
                 
                 {selectedCharacter && (
                   <div className="character-preview-section">
-                    <div className="character-preview">
-                      <img src={`/images/players/${selectedCharacter}.svg`} alt="Selected Character" />
-                    </div>
                     <div className="username-input-section">
                       <input
                         type="text"
@@ -156,21 +144,13 @@ const Intro = () => {
                         maxLength="20"
                       />
                     </div>
-                    <div className="button-group">
-                      <button 
-                        className={`start-game-btn ${!username.trim() ? 'disabled' : ''}`} 
-                        onClick={handleStartGame}
-                        disabled={!username.trim()}
-                      >
-                        Start
-                      </button>
-                      <button 
-                        className="try-again-btn"
-                        onClick={handleTryAgain}
-                      >
-                        Try Again
-                      </button>
-                    </div>
+                    <button 
+                      className={`start-game-btn ${!username.trim() ? 'disabled' : ''}`} 
+                      onClick={handleStartGame}
+                      disabled={!username.trim()}
+                    >
+                      Start
+                    </button>
                   </div>
                 )}
               </div>
