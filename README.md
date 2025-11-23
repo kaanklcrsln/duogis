@@ -1,6 +1,6 @@
 # duolingoGIS
 
-**DuoGIS** is a next-generation interactive learning platform built with **React**, combining **Duolingo’s proven gamification methodology** with **geography education**.  
+**DuoGIS** is a next-generation interactive learning platform built with **React**, combining **Duolingo's proven gamification methodology** with **geography education**.  
 The platform aims to teach users about **world geography** and **cultural symbols (flags)** through an **interactive map interface**.
 
 
@@ -11,6 +11,11 @@ https://github.com/user-attachments/assets/e6b79fb0-829b-4462-b309-9f9bfa13b731
 
 ---
 ![DuoGIS Interface](https://github.com/user-attachments/assets/3bca5ec1-caab-4411-95bd-bbd9c14b7738)
+
+<img width="1920" height="1080" alt="Comp 1_00000" src="https://github.com/user-attachments/assets/6c9a98e3-2941-4aa1-ace5-dc09db3bc41b" />
+
+
+
 ### Mission
 
 To make world geography and cultures fun, interactive, and accessible for everyone — delivering a lasting learning experience inspired by the Duolingo methodology.
@@ -30,8 +35,8 @@ Users must either:
 - Select its name from multiple choices.
 
 ### Progress & Scoring
-- Each correct answer earns **points** and marks that country as **“learned.”**  
-- Each incorrect guess reduces the player’s **“life” (heart)** count by one.  
+- Each correct answer earns **points** and marks that country as **"learned."**  
+- Each incorrect guess reduces the player's **"life" (heart)** count by one.  
 - The level continues until all countries in the selected continent are learned.  
 - If all lives are lost, the user must restart the level.
 
