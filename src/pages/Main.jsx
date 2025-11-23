@@ -477,15 +477,15 @@ const Main = () => {
         </div>
         <div className="stats-container">
           <div className="stat-item">
-            <img src="/assets/images/components/streak_button.svg" alt="Streak" className="stat-icon" />
+            <img src="./assets/images/components/streak_button.svg" alt="Streak" className="stat-icon" />
             <span className="stat-value">0</span>
           </div>
           <div className="stat-item">
-            <img src="/assets/images/components/gem_button.svg" alt="Gems" className="stat-icon" />
+            <img src="./assets/images/components/gem_button.svg" alt="Gems" className="stat-icon" />
             <span className="stat-value">1200</span>
           </div>
           <div className="stat-item">
-            <img src="/assets/images/components/health_button.svg" alt="Health" className="stat-icon" />
+            <img src="./assets/images/components/health_button.svg" alt="Health" className="stat-icon" />
             <span className="stat-value">5</span>
           </div>
         </div>
@@ -498,9 +498,9 @@ const Main = () => {
       />
       <div className="dark-mode-toggle" onClick={toggleDarkMode}>
         {isDarkMode ? (
-          <img src="/images/duo/icon.svg" alt="Light Mode" className="dark-mode-icon" />
+          <img src="./images/duo/icon.svg" alt="Light Mode" className="dark-mode-icon" />
         ) : (
-          <img src="/images/duo/icon-dark.svg" alt="Dark Mode" className="dark-mode-icon" />
+          <img src="./images/duo/icon-dark.svg" alt="Dark Mode" className="dark-mode-icon" />
         )}
       </div>
       <div className={`follow-banner ${isDarkMode ? 'slide-in' : ''} ${isClosing && isDarkMode ? 'slide-out' : ''}`}>
