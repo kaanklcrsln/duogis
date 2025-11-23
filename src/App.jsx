@@ -6,7 +6,7 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/duogis">
       <Routes>
         <Route path="/" element={<Intro />} />
         <Route path="/main" element={<Main />} />
