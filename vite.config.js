@@ -6,8 +6,9 @@ export default defineConfig({
   server: {
     port: 3000
   },
+  base: '/duogis/',
   root: './',
-  publicDir: 'assets',
+  publicDir: 'public',
   build: {
     outDir: 'dist'
   }
